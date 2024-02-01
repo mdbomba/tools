@@ -112,9 +112,23 @@ elif test -f "/etc/os-release"; then
   fi
 fi
 
+if test $platform = "linuxmint"; then
+  echo "MAPPING TO LINUX MINT TO UBUNTU"
+  platform='ubuntu'
+  platform_major=`echo $platform_version | cut -d "." -f 1`
+  if test $platform_major = "21"; then
+    platform_version='22.04'
+  fi
+  if test $platform_major = "20"; then
+    platform_version='20.04'
+  fi
+fi 
+
+echo ""
 echo "platform = $platform"
 echo "platform_version = $platform_version"
-
+echo "machine = $machine"
+echo ""
 read -p "Press Enter to close this window" 
 
 exit

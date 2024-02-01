@@ -1,3 +1,4 @@
+
 #!/bin/sh
 # WARNING: REQUIRES /bin/sh
 #
@@ -517,6 +518,23 @@ if test "x$platform" = "x"; then
   report_bug
   exit 1
 fi
+
+# LinuxMint is a Ubuntu based distro and if identified, should be
+# mapped to ubuntu. LinuxMint versions are 1 less than matching ubuntu
+# below maps platform and platform_version to ubuntu equivalents
+if test $platform = "linuxmint"; then
+  echo "MAPPING TO LINUX MINT TO UBUNTU"
+  platform='ubuntu'
+  platform_major=`echo $platform_version | cut -d "." -f 1`
+  if test $platform_major = "21"; then
+    platform_version='22.04'
+  fi
+  if test $platform_major = "20"; then
+    platform_version='20.04'
+  fi
+fi 
+
+
 
 #
 # NOTE: platform mangling in the install.sh is DEPRECATED
