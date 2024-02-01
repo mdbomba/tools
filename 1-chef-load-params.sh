@@ -9,24 +9,28 @@ echo "Version = $version"
 echo ''
 #
 STAMP=$(date +"_%Y%j%H%M%S")
+cp ~/.bashrc ~/bashrc_$STAMP
+cp /etc/hosts ~/hosts_$STAMP
 #
 # Create function to set environment variables for Chef installs
 # usage is  $ loadEnvironment 'variablename' 'value'
 #
 loadEnvironment() { 
-newalue=''  
+newValue=''  
 if [ "x$1" = "x" ] || [ "x$2" = 'x' ]
   then 
     echo "function loadEnvironment requires 2 arguments"
     echo "Example is  $  loadEnvironment 'CHEF_ADMIN_ID' 'mike' "
     return
   else 
-    OUT="$HOME/OUT$STAMP"
-    newValue=$2
-    export $1=$newValue
-    sed "/$1/d" ~/.bashrc | tee "$OUT" >>/dev/null; cp "$OUT" ~/.bashrc; rm "$OUT"
-    echo "export $1=""'""$newValue""'" >> ~/.bashrc
-    echo "$1=""'""$newValue""'"
+ newValue="$2"
+ echo "$1=$2" | bash
+ export $1
+
+ O="o_$STAMP"
+ grep -v "$1" ~/.bashrc > $O ; cp $O ~/.bashrc ; rm $O
+ echo "$1=""'""$newValue""'" >> ~/.bashrc
+ echo "export $1" >> ~/.bashrc
 fi
 }
 
@@ -119,7 +123,7 @@ if ! which 'code' | grep -q -w '/usr/bin/code' - ; then
   if [ ! -f /usr/share/keyrings/vscode.gpg ]
     then
       echo "################### GET CODE SIGNING KEY FOR VISUAL STUDIO CODE ############################"
-      sudo wget -O- https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor | sudo tee /usr/share/keyrings/vscode.gpg
+      sudo wget -O- https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor | sudo tee /usr/share/keyrings/vscode.gpg /dev/null
   fi
 
   if [ ! -f /etc/apt/sources.list.d/vscode.list ]
@@ -131,6 +135,16 @@ if ! which 'code' | grep -q -w '/usr/bin/code' - ; then
   sudo apt update
   sudo apt install code -y
 fi
+
+# Update system settings needed for Chef Server
+sudo sysctl -w vm.max_map_count=262144
+sudo sysctl -w vm.dirty_expire_centisecs=20000
+WF="wf$STAMP"
+grep -v 'sysctl' /etc/sysctl.conf > $WF
+echo 'sysctl -w vm.max_map_count=262144' >> $WF
+echo 'sysctl -w vm.dirty_expire_centisecs=20000' >> $WF
+sudo cp $WF /etc/sysctl.conf
+rm $WF
 
 
 
