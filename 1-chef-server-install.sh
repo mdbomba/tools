@@ -28,3 +28,8 @@ if [ ! -f "./$CHEF_ORG-validator.pem" ]
     sudo chef-server-ctl org-create "$CHEF_ORG" "$CHEF_ORG_LONG" --association_user "$CHEF_ADMIN_ID" --filename "$CHEF_ORG-validator.pem"
 fi
 
+# FOR LICENSED VERSIONS OF CHEF SERVER - REPLACE "N" WITH NUMBER OF LICENSED NODES, UNCOMMENT AND RUN THIS SECTION
+#
+# sudo echo "license['nodes'] = N " >> /etc/opscode/chef-server.rb
+#
+
