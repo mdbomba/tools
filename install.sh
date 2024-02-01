@@ -1,4 +1,6 @@
-
+#
+# FORKED BY MICHAEL BOMBA FOR A SPECIAL PROJECT. PLEASE USE OFFICIAL VERSION LOCATED AT https://omnitruck.chef.io/install.sh
+#
 #!/bin/sh
 # WARNING: REQUIRES /bin/sh
 #
@@ -20,7 +22,42 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+##################################################################################################################################################################
+#
+#  $ sudo install.sh -c {channel} -d {directory} -f {filename} -P {product} -v {product version} -s {install strategy} -l {alternate-install-source} -a {checksum} 
+#
+##################################################################################################################################################################
+#
+#   In addition to the default install behavior, the Chef Software Install script supports the following options:
+#
+#   RECOMMEND TO ALWAYS USE THE -P OPTION, REMAINDER OF OPTIONS HAVE DEFAULTS THAT RESULT IN STABLE CURRENT VERSION
+#
+#   -c (-channel on Windows)                    The release channel from which a package is pulled. Possible values: current or stable. Default value: stable.
+#
+#   -d (-download_directory on Windows)         The directory into which a package is downloaded. When a package already exists in this directory and the 
+#                                               checksum matches, the package is not re-downloaded. When -d and -f are not specified, a package is 
+#                                               downloaded to a temporary directory. 
+#   
+#   -f (-filename on Windows)                   The name of the file and the path at which that file is located. When a filename already exists at this path 
+#                                               and the checksum matches, the package is not re-downloaded. When -d and -f are not specified, a package is 
+#                                               downloaded to a temporary directory.
+#   
+#   -P (-project on Windows)                    The product name to install. Supported versions of Chef products are automate, chef, chef-server, inspec, 
+#                                               chef-workstation, chefdk, supermarket, chef-backend, push-jobs-client, and push-jobs-server. 
+#                                               DEFAULT VALUE: chef.
+#   
+#   -v (-version on Windows)                    The version of the package to be installed. A version always takes the form x.y.z, where x, y, and z are 
+#                                               decimal numbers that are used to represent major (x), minor (y), and patch (z) versions. A two-part 
+#                                               version (x.y) is also allowed. For more information about application versioning, see https://semver.org/   
+#
+#   -s (-install_strategy on Windows)           The method of package installations. The default strategy is to always install when the install.sh script runs. 
+#                                               Set to “once” to skip installation if the product is already installed on the node.
+#   
+#   -l (-download_url_override on Windows)      Install package downloaded from a direct URL.
+#   
+#   -a (-checksum on Windows)                   The SHA256 for download_url_override
+#   
+#   
 # helpers.sh
 ############
 # This section has some helper functions to make life easier.
@@ -436,14 +473,6 @@ elif test -f "/etc/Eos-release"; then
 elif test -f "/etc/redhat-release"; then
   platform=`sed 's/^\(.\+\) release.*/\1/' /etc/redhat-release | tr '[A-Z]' '[a-z]'`
   platform_version=`sed 's/^.\+ release \([.0-9]\+\).*/\1/' /etc/redhat-release`
-
-  if test "$platform" = "xenserver"; then
-    # Current XenServer 6.2 is based on CentOS 5, platform is not reset to "el" server should handle response
-    platform="xenserver"
-  else
-    # FIXME: use "redhat"
-    platform="el"
-  fi
 
 elif test -f "/etc/system-release"; then
   platform=`sed 's/^\(.\+\) release.\+/\1/' /etc/system-release | tr '[A-Z]' '[a-z]'`
