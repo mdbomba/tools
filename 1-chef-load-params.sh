@@ -20,20 +20,23 @@ STAMP=$(date +"_%Y%j%H%M%S")
 #
 # CLEAR OLD ENTRIES FROM .bashrc
 
-grep -v "CHEF" ~/.bashrc | tee ~/.bashrc >> /dev/null
+grep -v "CHEF" "$HOME/.bashrc" | sudo tee "$HOME/.bashrc" >> /dev/null
 grep -v "chef" /etc/hosts | sudo tee /etc/hosts >> /dev/null
 echo "127.0.1.1  $HOSTNAME" | sudo tee -a /etc/hosts >> /dev/null
 
-loadEnvironment() { 
-newValue=''  
+cat .bashrc
+
+read 'Enter to continue' in1
+
+loadEnvironment() {   
 if [ "x$1" = "x" ] || [ "x$2" = 'x' ]
   then 
     echo "function loadEnvironment requires 2 arguments"
     echo "Example is  $  loadEnvironment 'CHEF_ADMIN_ID' 'mike' "
     return
   else 
-    echo "$1='$2'"   | tee -a ~/.bashrc >> /dev/null
-    echo "export $1" | tee -a ~/.bashrc >> /dev/null
+    echo "$1='$2'"   | sudo tee -a "$HOME/.bashrc" 
+    echo "export $1" | sudo tee -a "$HOME/.bashrc"
 fi
 }
 
@@ -47,7 +50,7 @@ if [ "x$1" = "x" ] || [ "x$2" = 'x' ] || [ "x$3" = "x" ]
   then 
     echo "function loadHost requires 3 arguments" 
     echo "usage is  $ loadHost 'ip address' 'hostname' 'domainname'"
-     return
+    return
   else 
     sudo echo "$1  $2 $2.$3" | sudo tee -a /etc/hosts >> /dev/null
 fi
@@ -83,7 +86,7 @@ loadEnvironment 'CHEF_WORKSTATION_URL' "https://packages.chef.io/files/stable/ch
 loadEnvironment 'CHEF_AUTOMATE_URL' 'https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automate_linux_amd64.zip'
 
 # need to update /etc/hosts to add all above names and IP addresses
-sudo cp /etc/hosts "/etc/hosts$STAMP"
+
 loadHost "$CHEF_WORKSTATION_IP" "$CHEF_WORKSTATION_NAME" "$CHEF_DOMAINNAME"
 loadHost "$CHEF_INFRA_IP" "$CHEF_INFRA_NAME" "$CHEF_DOMAINNAME"
 loadHost "$CHEF_AUTOMATE_IP" "$CHEF_AUTOMATE_NAME" "$CHEF_DOMAINNAME"
