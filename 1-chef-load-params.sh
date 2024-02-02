@@ -4,17 +4,26 @@ version='20240201'
 #
 # This script loads environmental variables related to Chef
 #
-echo 'This script will prompt for and load environmental variables related to the insallation and operations of Chef'
-echo "Version = $version"
+echo ""
+echo "######################################################################################"
+echo "#                                                                                    #"
+echo "#   This script will load environmental variables and app packages related to the    #"
+echo "#   installation and operations of Chef. Script Version = $version                   #"
+echo "#                                                                                    #"
+echo "######################################################################################"
 echo ''
 #
 STAMP=$(date +"_%Y%j%H%M%S")
-cp ~/.bashrc ~/bashrc_$STAMP
-cp /etc/hosts ~/hosts_$STAMP
 #
 # Create function to set environment variables for Chef installs
 # usage is  $ loadEnvironment 'variablename' 'value'
 #
+# CLEAR OLD ENTRIES FROM .bashrc
+
+grep -v "CHEF" ~/.bashrc | tee ~/.bashrc >> /dev/null
+grep -v "CHEF" /etc/hosts | sudo tee /etc/hosts >> /dev/null
+echo "127.0.1.1  $HOSTNAME" | sudo tee -a /etc/hosts >> /dev/null
+
 loadEnvironment() { 
 newValue=''  
 if [ "x$1" = "x" ] || [ "x$2" = 'x' ]
@@ -23,16 +32,11 @@ if [ "x$1" = "x" ] || [ "x$2" = 'x' ]
     echo "Example is  $  loadEnvironment 'CHEF_ADMIN_ID' 'mike' "
     return
   else 
- newValue="$2"
- echo "$1=$2" | bash
- export $1
-
- O="o_$STAMP"
- grep -v "$1" ~/.bashrc > $O ; cp $O ~/.bashrc ; rm $O
- echo "$1=""'""$newValue""'" >> ~/.bashrc
- echo "export $1" >> ~/.bashrc
+    echo "$1='$2'"   | tee -a ~/.bashrc >> /dev/null
+    echo "export $1" | tee -a ~/.bashrc >> /dev/null
 fi
 }
+
 
 #
 # Create function to update /etc/hosts file with chef componnets
@@ -45,18 +49,12 @@ if [ "x$1" = "x" ] || [ "x$2" = 'x' ] || [ "x$3" = "x" ]
     echo "usage is  $ loadHost 'ip address' 'hostname' 'domainname'"
      return
   else 
-    if ! grep -q "$1" /etc/hosts 
-      then 
-        sudo echo "$1  $2 $2.$3" | sudo tee -a /etc/hosts
-    fi
+    sudo echo "$1  $2 $2.$3" | sudo tee -a /etc/hosts >> /dev/null
 fi
 }
 
 # ENTER ENVIRONMENTAL VARIABLES FOR CHEF INSTALLATION (saves to ~/.bashrc)
-echo '###############################################'
-echo "Below is a list of Chef Environmental Variables"
-echo '###############################################'
-echo ''
+
 loadEnvironment 'CHEF_ORG' 'chef-demo'                          ; # Collect Chef Organization short name (lowercase)
 loadEnvironment 'CHEF_ORG_LONG' 'Chef Demo Organization'        ; # Collect Chef Organization long name
 loadEnvironment 'CHEF_DOMAINNAME' 'localhost'                   ; # Collect domain name for Chef environment
@@ -84,11 +82,6 @@ loadEnvironment 'CHEF_NODE2_IP' '10.0.0.9'                      ; # Collect Chef
 loadEnvironment 'CHEF_WORKSTATION_URL' "https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb"
 loadEnvironment 'CHEF_AUTOMATE_URL' 'https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automate_linux_amd64.zip'
 
-
-. ~/.bashrc
-
-
-
 # need to update /etc/hosts to add all above names and IP addresses
 sudo cp /etc/hosts "/etc/hosts$STAMP"
 loadHost "$CHEF_WORKSTATION_IP" "$CHEF_WORKSTATION_NAME" "$CHEF_DOMAINNAME"
@@ -98,59 +91,64 @@ loadHost "$CHEF_NODE1_IP" "$CHEF_NODE1_NAME" "$CHEF_DOMAINNAME"
 loadHost "$CHEF_NODE2_IP" "$CHEF_NODE2_NAME" "$CHEF_DOMAINNAME"
 
 # apparmor can cause issues with Chef Server(s), so below will remove apparmor
-sudo apt remove apparmor -y
+if [ `command -v apparmor` ]; then sudo apt remove apparmor -y; fi
 
 # git is used for most chef components
-sudo apt install git -y
+if [ ! `command -v git` ]; then sudo apt install git -y; fi
 git config --global user.name "$CHEF_GIT_USER"
 git config --global user.email "$CHEF_GIT_EMAIL"
 
 # curl is used across all chef components
-sudo apt install curl -y
+if [ ! `command -v curl` ]; then sudo apt install curl -y; fi
 sed '/tlsv1.2/d' ~/.curlrc > ~/.curlrc
 sed '/insecure/d' ~/.curlrc > ~/.curlrc
 echo "--tlsv1.2" >> ~/.curlrc
 echo '--insecure' >> ~/.curlrc
 
 # Install tree (pretty version of "ls -lr" command )
-sudo apt install tree -y
+if [ ! `command -v tree` ]; then sudo apt install tree -y; fi
 
 # Install gzip
-sudo apt install gzip -y
+if [ ! `command -v gzip` ]; then sudo apt install gzip -y; fi
 
 # Ensure openssh-server is installed
-sudo git install openssh-server -y
+if [ ! `command -v sshd` ]; then sudo apt install openssh-server -y; fi
 
 # Install additional tools
-sudo apt install software-properties-common apt-transport-https wget -y
+if [ ! `command -v wget` ]; then sudo apt install wget -y; fi
+if [ ! `command -v add-apt-repository` ]; then sudo apt install software-properties-common -y; fi
+if [ ! `command -v apt-get` ]; then sudo apt install apt-transport-https -y; fi
 
 # Add Repo for Microsoft Visual Studio Code
-if ! which 'code' | grep -q -w '/usr/bin/code' - ; then 
-  if [ ! -f /usr/share/keyrings/vscode.gpg ]
-    then
-      echo "################### GET CODE SIGNING KEY FOR VISUAL STUDIO CODE ############################"
-      sudo wget -O- https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor | sudo tee /usr/share/keyrings/vscode.gpg /dev/null
-  fi
+if [ ! `command -v wget` ]; then 
+  if ! which 'code' | grep -q -w '/usr/bin/code' - ; then 
+    if [ ! -f /usr/share/keyrings/vscode.gpg ]
+      then
+        echo "################### GET CODE SIGNING KEY FOR VISUAL STUDIO CODE ############################"
+        sudo wget -O- https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor | sudo tee /usr/share/keyrings/vscode.gpg /dev/null
+    fi
 
-  if [ ! -f /etc/apt/sources.list.d/vscode.list ]
-    then
-      echo "################################## ADDING VISUAL STUDIO CODE GIT_REPOSITORY TO APT STORE ###########################"
-      echo deb [arch=amd64 signed-by=/usr/share/keyrings/vscode.gpg] https://packages.microsoft.com/repos/vscode stable main | sudo tee /etc/apt/sources.list.d/vscode.list
+    if [ ! -f /etc/apt/sources.list.d/vscode.list ]
+      then
+        echo "################################## ADDING VISUAL STUDIO CODE GIT_REPOSITORY TO APT STORE ###########################"
+        echo deb [arch=amd64 signed-by=/usr/share/keyrings/vscode.gpg] https://packages.microsoft.com/repos/vscode stable main | sudo tee /etc/apt/sources.list.d/vscode.list
+    fi
+    # Install Visual Studio Code
+    sudo apt update
+    sudo apt install code -y
   fi
-  # Install Visual Studio Code
-  sudo apt update
-  sudo apt install code -y
 fi
-
 # Update system settings needed for Chef Server
-sudo sysctl -w vm.max_map_count=262144
-sudo sysctl -w vm.dirty_expire_centisecs=20000
-WF="wf$STAMP"
-grep -v 'sysctl' /etc/sysctl.conf > $WF
-echo 'sysctl -w vm.max_map_count=262144' >> $WF
-echo 'sysctl -w vm.dirty_expire_centisecs=20000' >> $WF
-sudo cp $WF /etc/sysctl.conf
-rm $WF
+sudo sysctl -w vm.max_map_count=262144           | sudo tee /dev/null >> /dev/null
+sudo sysctl -w vm.dirty_expire_centisecs=20000   | sudo tee /dev/null >> /dev/null
+grep -v 'sysctl' /etc/sysctl.conf                | sudo tee    /etc/sysctl.conf >> /dev/null
+echo 'sysctl -w vm.max_map_count=262144'         | sudo tee -a /etc/sysctl.conf >> /dev/null
+echo 'sysctl -w vm.dirty_expire_centisecs=20000' | sudo tee -a /etc/sysctl.conf >> /dev/null
 
-
-
+echo ""
+echo "######################################################################################"
+echo "#                                                                                    #"
+echo "#    Parameters are loaded into .bashrc. To make them active close and reopen bash   #"
+echo "#                                                                                    #"
+echo "######################################################################################"
+echo ''
