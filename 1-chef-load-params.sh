@@ -81,7 +81,13 @@ loadEnvironment 'CHEF_NODE1_IP' '10.0.0.8'                      ; # Collect Chef
 loadEnvironment 'CHEF_NODE2_NAME' 'chef-node2'                  ; # Collect Chef Node 2 Name
 loadEnvironment 'CHEF_NODE2_IP' '10.0.0.9'                      ; # Collect Chef Node 2 IP address
 
+loadEnvironment 'CHEF_WORKSTATION_URL' "https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb"
+loadEnvironment 'CHEF_AUTOMATE_URL' 'https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automate_linux_amd64.zip'
+
+
 . ~/.bashrc
+
+
 
 # need to update /etc/hosts to add all above names and IP addresses
 sudo cp /etc/hosts "/etc/hosts$STAMP"
