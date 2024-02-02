@@ -21,7 +21,7 @@ STAMP=$(date +"_%Y%j%H%M%S")
 # CLEAR OLD ENTRIES FROM .bashrc
 
 grep -v "CHEF" ~/.bashrc | tee ~/.bashrc >> /dev/null
-grep -v "CHEF" /etc/hosts | sudo tee /etc/hosts >> /dev/null
+grep -v "chef" /etc/hosts | sudo tee /etc/hosts >> /dev/null
 echo "127.0.1.1  $HOSTNAME" | sudo tee -a /etc/hosts >> /dev/null
 
 loadEnvironment() { 
