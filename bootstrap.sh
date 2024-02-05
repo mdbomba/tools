@@ -2,8 +2,11 @@
 #
 # To get this and other files, first store them in a folder ~/node on the 
 # chef workstation. Recommend you source prep.sh, bootstrap.sh, install.sh and 
-# chef_18.4.2-1_amd64.deb.  You can get prep.sh and bootstrap.sh from
-#
+# chef_18.4.2-1_amd64.deb.  
+#   -  wget https://github.com/mdbomba/tools/blob/main/bootstrap.sh
+#   -  wget https://github.com/mdbomba/tools/blob/main/prep.sh
+#   -  wget https://packages.chef.io/files/stable/chef/18.4.2/ubuntu/22.04/chef_18.4.2-1_amd64.deb
+#   -  wget https://omnitruck.chef.io/install.sh
 #
 # Run prep.sh script before running bootstrap.sh
 #   -  prep.sh will update hosts file with chef components
