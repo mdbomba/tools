@@ -1,8 +1,10 @@
 #!/bin/bash -xe
 #
 # To get this and other files, first store them in a folder ~/node on the 
-# chef workstation. Recommend you source prep.sh, bootstrap.sh, install.sh and 
-# chef_18.4.2-1_amd64.deb.  
+# chef workstation. Recommend you source prep.sh, bootstrap.sh, install.sh,
+# chef_18.4.2-1_amd64.deb and the org-validator.pem file in this folder.
+# The og-validator.pem file was created when you installed and initialized the 
+# chef-server.
 #   -  wget https://github.com/mdbomba/tools/blob/main/bootstrap.sh
 #   -  wget https://github.com/mdbomba/tools/blob/main/prep.sh
 #   -  wget https://packages.chef.io/files/stable/chef/18.4.2/ubuntu/22.04/chef_18.4.2-1_amd64.deb
@@ -23,55 +25,76 @@
 # 
 #
 # Chef Client bootstrap setup
-
-# Enter sudo su mode
-sudo su
-
 . ~/.chefparams
 
 # Do some chef pre-work
-mkdir -p /etc/chef
-mkdir -p /var/lib/chef
-mkdir -p /var/log/chef
-
-cd /etc/chef
-
+sudo mkdir -p /etc/chef
+sudo mkdir -p /var/lib/chef
+sudo mkdir -p /var/log/chef
+sudo mkdir -p ~/temp
+cd ~/temp
+#
+# Get all files
+#
+scp "$CHEF_ADMIN_ID@$CHEF_WORKSTATION_NAME:/home/$CHEF_ADMIN_ID/node/*" .
+#
+#
 # Create first-boot.json
-cat > "/etc/chef/first-boot.json" << EOF
+cat > "./first-boot.json" << EOF
 {
    "policy_group": "dev",
    "policy_name": "base"
 }
 EOF
-
+#
+sudo cp first-boot.json /etc/chef
+#
 # Create client.rb
-cat > /etc/chef/client.rb << EOF
+cat > ./client.rb << EOF
 log_location     STDOUT
 ssl_verify_mode     :verify_none
 verify_api_cert     false
-chef_server_url  "https://chef-automate/organizations/chef-demo"
-validation_client_name "chef-demo-validator"
-validation_key "/etc/chef/chef-demo-validator.pem"
+chef_server_url  "https://$CHEF_SERVER_NAME/organizations/$CHEF_ORG"
+validation_client_name "$CHEF_ORG-validator"
+validation_key "/etc/chef/$CHEF_ORG-validator.pem"
 node_name  "${HOSTNAME}"
 chef_license "accept"
 EOF
-
+#
+sudo cp client.rb /etc/chef
+#
+cd /etc/chef
+#
 # Download the validator key
-cd /etc/chef/
-if [ ! -f /etc/chef/chef-demo-validator.pem ]; then
- scp mike@mike-mint:/home/mike/.chef/chef-demo-validator.pem /etc/chef/
+if [ -f "$HOME/temp/$CHEF_ORG-validator.pem" ]; then
+  sudo rm -f "./$CHEF_ORG-validator.pem"
+  sudo cp "$HOME/temp/$CHEF_ORG-validator.pem" .
+else
+  echo "Place $CHEF_ORG-validator.pem in $HOME/temp and rerun script"
+  exit
 fi
-
-# Install chef
-rm -f ./install.sh*
-wget https://omnitruck.chef.io/install.sh 
-if [ ! -f ./install.sh ]; then echo "Cound not download install script"; exit ; exit ; fi
-chmod +x ./install.sh
-./install.sh -v 'latest'
-
+#
+# Get install.sh script (needed if .deb file not placed in workstation ~\node folder)
+if [ -f "$HOME/temp/install.sh" ]; then
+  sudo rm -f ./install.sh
+  sudo cp "$HOME/temp/install.sh" .
+else
+  echo "Place install.sh in $HOME/temp and rerun script"
+  exit
+fi
+#
+sudo chmod +x *.sh
+#
+# Get client .deb file
+if [ -f "$HOME/temp/chef_18.4.2-1_amd64.deb" ]; then
+  sudo rm -f "./chef_18.4.2-1_amd64.deb"
+  sudo cp "$HOME/temp/chef_18.4.2-1_amd64.deb" . 
+  sudo dpkg -i ./chef_18.4.2-1_amd64.deb
+else 
+  sudo ./install.sh -v 'latest'
+fi
+#
 # Run chef-client with the first-boot.json to set the policy
-chef-client -j /etc/chef/first-boot.json | tee chef-client-output.txt
+sudo chef-client -j /etc/chef/first-boot.json | sudo tee chef-client-output.txt
 echo "Node name is $HOSTNAME" 
 
-# Exit from sudo su mode
-exit
