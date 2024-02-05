@@ -1,5 +1,5 @@
 This repo will hold work related to automating the installation of Chef Workstation and Chef Server. 
-Do NOT run prep.sh or .. using sudo. There are relative locations (eg ~) that change when using sudo.
+Do NOT run prep.sh or bootstrap.sh using sudo. There are relative locations (eg ~) that change when using sudo.
 
 
 Chef Server installs will use the Chef Automate process (download chef-automate installer and use the -products 
