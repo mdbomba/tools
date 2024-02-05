@@ -26,7 +26,7 @@ this will place 2 files in the ~/.ssh folder. copy the id_rsa.pub to authorized_
 To use exact same keys in all nodes, copy both id_rsa files to ~/.ssh on all nodes and copy id_rsa.pub to the local authorized_users file 
 (replacing the contents of this file with the contents of id_rsa.pub.)
 
-when working with machines that do not have public or trusted certs, you will need to ssh to each node and accept the cert issue (ssh mike@192.168.56.5)
+When working with machines that do not have public or trusted certs, you will need to ssh once from and to each node and accept the cert issue (ssh mike@192.168.56.5)
 
 If you have a problem bootstraping a node, make sure the chef server (automate server) does not have a client entry for the node. If there is a client entry and no node entry, delete the client entry and try to bootstrap again. 
 
