@@ -1,0 +1,17 @@
+
+# Download Chef Workstation deb file
+wget https://packages.chef.io/files/stable/chef-workstation/23.12.1055/ubuntu/22.04/chef-workstation_23.12.1055-1_amd64.deb
+
+# Download Chef Server deb file
+wget https://packages.chef.io/files/stable/chef-server-core/15.9.20/ubuntu/22.04/chef-server-core_15.9.20-1_amd64.deb
+
+# Download Chef Client deb file
+wget https://packages.chef.io/files/stable/chef/18.4.2/ubuntu/22.04/chef_18.4.2-1_amd64.deb
+
+# Download automate installer executable
+wget https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automate_linux_amd64.zip
+
+# Dowmload Chef install.sh
+wget https://omnitruck.chef.io/install.sh
+
+
