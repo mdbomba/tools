@@ -1,6 +1,6 @@
-# Version 20240218
+# Version 20240219
 #
-version='20240218'
+version='20240219'
 #
 # This script loads environmental variables related to Chef
 #
@@ -33,7 +33,7 @@ cd $myhome
 # CLEAR OLD CHEF ENTRIES FROM .bashrc
 grep -v -i "CHEF" ".bashrc" > bashrc
 
-# CREATE ADDITIONS FILE TO BE ADDED TO .bashrd
+# CREATE ADDITIONS FILE TO BE ADDED TO .bashrc
 echo '# START OF CHEF PARAMETERS
 CHEF_ORG="chef-demo"                          ; # Collect Chef Organization short name (lowercase)
 CHEF_ORG_LONG="Chef Demo Organization"        ; # Collect Chef Organization long name
@@ -53,7 +53,13 @@ CHEF_NODE2_NAME="chef-node2"                  ; # Collect Chef Node 2 Name
 CHEF_NODE2_IP="10.0.1.9"                      ; # Collect Chef Node 2 IP address
 CHEF_WORKSTATION_URL="https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb"
 CHEF_AUTOMATE_URL="https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automate_linux_amd64.zip"
-' > chefparams ; cp -f chefparams .chefparams
+' > chefparams 
+
+. chefparams
+
+if test `hostname -s` = $CHEF_WORKSTATION_NAME; then echo 'eval "$(chef shell-init bash)"' >> chefparams ; fi
+
+cp -f chefparams .chefparams
 . .chefparams
 
 cat chefparams >> newbashrc

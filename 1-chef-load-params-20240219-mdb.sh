@@ -50,15 +50,19 @@ CHEF_ADMIN_LAST="Bomba"                       ; # Collect Chef admin last name
 CHEF_ADMIN_EMAIL="mike.bomba@progress.com"    ; # Collect Chef admin email
 CHEF_WORKSTATION_NAME="chef-workstation"      ; # Collect Chef Workstation name (lowercase)
 CHEF_WORKSTATION_IP="10.0.0.6"                ; # Collect Chef Workstation IP address
-CHEF_AUTOMATE_NAME="chef-automate"            ; # Collect Chef Automate Server Name (lowercase)
-CHEF_AUTOMATE_IP="10.0.0.7"                   ; # Collect Chef Automate Server IP address
+CHEF_SERVER_NAME="chef-server"                ; # Collect Chef Server Name (lowercase)
+CHEF_SERVER_IP="10.0.0.7"                     ; # Collect Chef Server IP address
 CHEF_NODE1_NAME="chef-node1"                  ; # Collect Chef Node 1 Name
 CHEF_NODE1_IP="10.0.0.8"                      ; # Collect Chef Node 1 IP address
 CHEF_NODE2_NAME="chef-node2"                  ; # Collect Chef Node 2 Name
 CHEF_NODE2_IP="10.0.0.9"                      ; # Collect Chef Node 2 IP address
-CHEF_WORKSTATION_URL="https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb"
-CHEF_AUTOMATE_URL="https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automate_linux_amd64.zip"
-' > chefparams ; cp -f chefparams .chefparams
+' > chefparams 
+
+. chefparams
+
+if test `hostname -s` = "$CHEF_WORKSTATION_NAME"; then echo 'eval "$(chef shell-init bash)"' >> chefparams; fi
+
+cp -f chefparams .chefparams
 . .chefparams
 
 cat bashrc chefparams > newbashrc
@@ -81,7 +85,7 @@ hdname="$hname.$dname"
 echo "# CHEF INFO
 127.0.1.1  $hname  $hdname
 $CHEF_WORKSTATION_IP  $CHEF_WORKSTATION_NAME  $CHEF_WORKSTATION_NAME.$CHEF_DOMAINNAME
-$CHEF_AUTOMATE_IP  $CHEF_AUTOMATE_NAME  $CHEF_AUTOMATE_NAME.$CHEF_DOMAINNAME
+$CHEF_SERVER_IP  $CHEF_SERVER_NAME  $CHEF_SERVER_NAME.$CHEF_DOMAINNAME
 $CHEF_NODE1_IP  $CHEF_NODE1_NAME  $CHEF_NODE1_NAME.$CHEF_DOMAINNAME
 $CHEF_NODE2_IP  $CHEF_NODE2_NAME  $CHEF_NODE2_NAME.$CHEF_DOMAINNAME
 " > $myhome/newhosts
@@ -140,9 +144,10 @@ echo $hdname | sudo tee /etc/hostname >> /dev/null
 rm .ssh/*
 ssh-keygen -b 4092 -f ~/.ssh/id_rsa -N '' 
 cp .ssh/id_rsa.pub .ssh/authorized_keys
-knife ssl fetch https://$CHEF_AUTOMATE_NAME/organizations/$CHEF_ORG
-knife ssl fetch https://$CHEF_AUTOMATE_NAME.$CHEF_DOMAINNAME/organizations/$CHEF_ORG
-knife ssl fetch https://$CHEF_AUTOMATE_IP/organizations/$CHEF_ORG
+
+knife ssl fetch https://$CHEF_SERVER_NAME/organizations/$CHEF_ORG
+knife ssl fetch https://$CHEF_SERVER_NAME.$CHEF_DOMAINNAME/organizations/$CHEF_ORG
+knife ssl fetch https://$CHEF_SERVER_IP/organizations/$CHEF_ORG
 
 
 

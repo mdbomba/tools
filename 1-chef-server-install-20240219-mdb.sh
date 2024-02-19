@@ -1,3 +1,7 @@
+version=20240219
+#
+# Script to install infra-server only
+#
 # TEST TO SEE IF CHEF SERVER ALREADY INSTALLED
 
 if test `command -v chef-server-ctl` = '/usr/bin/chef-server-ctl'
@@ -6,7 +10,7 @@ if test `command -v chef-server-ctl` = '/usr/bin/chef-server-ctl'
  else
    mkdir ~/.chef
    read -p "Enter password for chef admin accout ($CHEF_ADMIN_ID): " CHEF_ADMIN_PASSWORD
-   wget https://github.com/mdbomba/tools/blob/main/install.sh
+   wget -O install.sh https://omnitruck.chef.io/install.sh
    chmod +x install.sh
    sudo ./install.sh -P chef-server
    sudo chef-server-ctl reconfigure
