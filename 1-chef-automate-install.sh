@@ -9,6 +9,8 @@ curl https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automa
 # Install builder, automate and infra server 
 sudo ./chef-automate deploy --product builder --product automate --product infra-server
 
+sudo chef-server-ctl reconfigure
+
 chef generate repo 'chef-repo'
 
 mkdir ~/chef-repo/.chef
