@@ -1,4 +1,4 @@
-version='20240224'
+version='20240226'
 #
 # This script loads environmental variables and dependent applications related to chef
 # It is meant to be ran on chef workstations and chef servers before installing chef
@@ -50,7 +50,7 @@ loadEnvironment 'CHEF_REPO' 'chef-repo'                              # Collect C
 loadEnvironment 'CHEF_ORG' 'chef'                                    # Collect Chef Organization short name (lowercase)
 loadEnvironment 'CHEF_ORG_LONG' 'Chef Management Organization'       # Collect Chef Organization long name
 loadEnvironment 'CHEF_DOMAINNAME' 'localhost'                        # Collect domain name for Chef environment
-loadEnvironment 'CHEF_ADMIN_ID' 'mike'                               # Collect Chef admin login id
+loadEnvironment 'CHEF_ADMIN_ID' 'chef'                               # Collect Chef admin login id
 loadEnvironment 'CHEF_ADMIN_FIRST' 'Mike'                            # Collect Chef admin first name
 loadEnvironment 'CHEF_ADMIN_LAST' 'Bomba'                            # Collect Chef admin last name
 loadEnvironment 'CHEF_ADMIN_EMAIL' 'mike.bomba@progress.com'         # Collect Chef admin email
@@ -178,5 +178,4 @@ fi
 #####################################
 # END UPDATE SSL CACHE
 #####################################
-
 
