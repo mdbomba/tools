@@ -47,8 +47,8 @@ echo "# BELOW ARE PARAMETERS ADDED BY CHEF" > ~/.chefparams          # Create a 
 loadEnvironment 'CHEF_GIT_USER' 'mdbomba'                            # Used to setup a git repo (if needed)
 loadEnvironment 'CHEF_GIT_USER_EMAIL' 'mbomba@kemptechnologies.com'  # Used to setup a git repo (if needed)
 loadEnvironment 'CHEF_REPO' 'chef-repo'                              # Collect Chef Organization short name (lowercase)
-loadEnvironment 'CHEF_ORG' 'chef-demo'                               # Collect Chef Organization short name (lowercase)
-loadEnvironment 'CHEF_ORG_LONG' 'Chef Demo Organization'             # Collect Chef Organization long name
+loadEnvironment 'CHEF_ORG' 'chef'                                    # Collect Chef Organization short name (lowercase)
+loadEnvironment 'CHEF_ORG_LONG' 'Chef Management Organization'       # Collect Chef Organization long name
 loadEnvironment 'CHEF_DOMAINNAME' 'localhost'                        # Collect domain name for Chef environment
 loadEnvironment 'CHEF_ADMIN_ID' 'mike'                               # Collect Chef admin login id
 loadEnvironment 'CHEF_ADMIN_FIRST' 'Mike'                            # Collect Chef admin first name
