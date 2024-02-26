@@ -1,9 +1,9 @@
 version='20240224'
 cd ~
 #
-# This script installs chef workstation on either Ubunto or Redhat Linux
+# This script installs chef server with automate on either Ubunto or Redhat Linux
 #
-echo 'This script installs chef server (automate + infra-server + habitat builder)'
+echo 'This script installs chef server (automate + infra-server)'
 echo 'This script should be started using user level (not sudo) rights.'
 echo "Version = $version"
 echo ''
@@ -24,7 +24,7 @@ read -p  "Enter password for Chef Admin Account ($CHEF_ADMIN_ID): " $CHEF_ADMIN_
 # DOWNLOAD AND INSTALL CHEF SERVER (AUTOMATE + INFRA_SERVER + BUILDER)
 #######################################################################
 curl https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automate_linux_amd64.zip | gunzip - > chef-automate && chmod +x chef-automate
-sudo ./chef-automate deploy --product builder --product automate --product infra-server
+sudo ./chef-automate deploy --product automate --product infra-server
 sudo chef-server-ctl reconfigure
 
 #########################
