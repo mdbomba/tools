@@ -1,4 +1,4 @@
-version='20240225'
+version='20240225.1'
 cd ~
 #
 # This script installs chef server with automate on either Ubunto or Redhat Linux
@@ -43,6 +43,20 @@ if [ ! -f "./$CHEF_ORG-validator.pem" ]
     sudo chef-server-ctl org-create "$CHEF_ORG" "$CHEF_ORG_LONG" --association_user "$CHEF_ADMIN_ID" --filename "$CHEF_ORG-validator.pem"
 fi
 
+###########################
+# CREATE ssh keys
+###########################
+if test `hostname -s` = "$CHEF_SERVER_NAME"; then
+  cd ~/.ssh
+  rm -f "$CHEF_SERVER_NAME*"
+  ssh-keygen -b 4092 -f $CHEF_SERVER_NAME -N '' 
+  cat  "$CHEF_SERVER_NAME.pub" >> authorized_keys
+  scp $CHEF_ADMIN_ID@$CHEF_WORKSTATION_NAME:"/home/$CHEF_USER_ID/.ssh/$CHEF_WORKSTATION_NAME.pub" .
+  cat $CHEF_WORKSTATION_NAME.pub >> authorized_keys
+  cd ~
+fi
+
+
 #####################################
 # UPDATE SSL CACHE
 #####################################
@@ -50,4 +64,3 @@ if ping -c 1 $CHEF_WORKSTATION_IP &> /dev/null; then
   scp  ~/*.pem "$CHEF_ADMIN_ID@$CHEF_WORKSTATION_NAME:/home/$CHEF_ADMIN_ID/.chef/$CHEF_ADMIN_ID.pem"
   scp  ~/*.toml "$CHEF_ADMIN_ID@$CHEF_WORKSTATION_NAME:/home/$CHEF_ADMIN_ID/.chef/"
 fi
-
