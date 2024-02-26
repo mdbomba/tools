@@ -1,4 +1,4 @@
-version='20240224'
+version='20240225'
 cd ~
 #
 # This script installs chef server with automate on either Ubunto or Redhat Linux
