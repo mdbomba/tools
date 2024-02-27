@@ -1,4 +1,4 @@
-version='20240226'
+version='20240227'
 cd ~
 #
 # This script installs chef workstation on either Ubunto or Redhat Linux
@@ -61,19 +61,16 @@ chef_server_url = 'https://$CHEF_SERVER_NAME/organizations/$CHEF_ORG'
 #####################################
 # UPDATE SSL USER KEY
 #####################################
-if test `hostname -s` = "$CHEF_WORKSTATION_NAME"; then
-  cd ~/.ssh
-  rm -f "$CHEF_WORKSTATION_NAME*"
-  ssh-keygen -b 4092 -f $CHEF_WORKSTATION_NAME -N '' 
-  cat  "$CHEF_WORKSTATION_NAME.pub" >> ~/.ssh/authorized_keys
-  cd ~
-fi
+hn=`hostname -s`
+cd ~/.ssh
+rm -f "$hn*"
+ssh-keygen -b 4092 -f $hn -N '' 
+cd ~
 
 #####################################
-# UPDATE SSL CACHE
+# UPDATE SSL CERTIFICATE CACHE
 #####################################
 if ping -c 1 $CHEF_SERVER_IP &> /dev/null; then
-  scp "$CHEF_ADMIN_ID@$CHEF_SERVER:/home/$CHEF_ADMIN_ID/$CHEF_ADMIN_ID.pem" ~/.chef/$CHEF_ADMIN_ID.pem
   knife ssl fetch https://$CHEF_SERVER_NAME
   knife ssl fetch https://$CHEF_SERVER_IP
 fi
