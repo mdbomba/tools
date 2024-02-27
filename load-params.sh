@@ -51,9 +51,9 @@ loadEnvironment 'CHEF_ORG' 'chef'                                    # Collect C
 loadEnvironment 'CHEF_ORG_LONG' 'Chef Management Organization'       # Collect Chef Organization long name
 loadEnvironment 'CHEF_DOMAINNAME' 'localhost'                        # Collect domain name for Chef environment
 loadEnvironment 'CHEF_ADMIN_ID' 'chef'                               # Collect Chef admin login id
-loadEnvironment 'CHEF_ADMIN_FIRST' 'Mike'                            # Collect Chef admin first name
-loadEnvironment 'CHEF_ADMIN_LAST' 'Bomba'                            # Collect Chef admin last name
-loadEnvironment 'CHEF_ADMIN_EMAIL' 'mike.bomba@progress.com'         # Collect Chef admin email
+loadEnvironment 'CHEF_ADMIN_FIRST' 'Chef'                            # Collect Chef admin first name
+loadEnvironment 'CHEF_ADMIN_LAST' 'Admin'                            # Collect Chef admin last name
+loadEnvironment 'CHEF_ADMIN_EMAIL' 'chef.admin@kemptech.biz'         # Collect Chef admin email
 loadEnvironment 'CHEF_WORKSTATION_NAME' 'chef-workstation'           # Collect Chef Workstation name (lowercase)
 loadEnvironment 'CHEF_WORKSTATION_IP' '10.0.1.6'                     # Collect Chef Workstation IP address
 loadEnvironment 'CHEF_SERVER_NAME' 'chef-server'                     # Collect Chef Server Name (lowercase)
