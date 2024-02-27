@@ -55,13 +55,13 @@ loadEnvironment 'CHEF_ADMIN_FIRST' 'Mike'                            # Collect C
 loadEnvironment 'CHEF_ADMIN_LAST' 'Bomba'                            # Collect Chef admin last name
 loadEnvironment 'CHEF_ADMIN_EMAIL' 'mike.bomba@progress.com'         # Collect Chef admin email
 loadEnvironment 'CHEF_WORKSTATION_NAME' 'chef-workstation'           # Collect Chef Workstation name (lowercase)
-loadEnvironment 'CHEF_WORKSTATION_IP' '10.0.0.6'                     # Collect Chef Workstation IP address
+loadEnvironment 'CHEF_WORKSTATION_IP' '10.0.1.6'                     # Collect Chef Workstation IP address
 loadEnvironment 'CHEF_SERVER_NAME' 'chef-server'                     # Collect Chef Server Name (lowercase)
-loadEnvironment 'CHEF_SERVER_IP' '10.0.0.7'                          # Collect Chef Server IP address
+loadEnvironment 'CHEF_SERVER_IP' '10.0.1.7'                          # Collect Chef Server IP address
 loadEnvironment 'CHEF_NODE1_NAME' 'chef-node1'                       # Collect Chef Node 1 Name
-loadEnvironment 'CHEF_NODE1_IP' '10.0.0.8'                           # Collect Chef Node 1 IP address
+loadEnvironment 'CHEF_NODE1_IP' '10.0.1.8'                           # Collect Chef Node 1 IP address
 loadEnvironment 'CHEF_NODE2_NAME' 'chef-node1'                       # Collect Chef Node 1 Name
-loadEnvironment 'CHEF_NODE2_IP' '10.0.0.9'                           # Collect Chef Node 1 IP address
+loadEnvironment 'CHEF_NODE2_IP' '10.0.1.9'                           # Collect Chef Node 1 IP address
 
 if test `hostname -s` = "$CHEF_WORKSTATION_NAME"                     # Add to parh if this is a chef workstation
   then echo 'eval "$(chef shell-init bash)"'"  # CHEF PARAM" >> ~/.chefparams
