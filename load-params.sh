@@ -1,4 +1,4 @@
-version='20240226'
+version='20240227'
 #
 # This script loads environmental variables and dependent applications related to chef
 # It is meant to be ran on chef workstations and chef servers before installing chef
