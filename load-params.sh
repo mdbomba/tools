@@ -60,7 +60,7 @@ loadEnvironment 'CHEF_SERVER_NAME' 'chef-server'                     # Collect C
 loadEnvironment 'CHEF_SERVER_IP' '10.0.1.7'                          # Collect Chef Server IP address
 loadEnvironment 'CHEF_NODE1_NAME' 'chef-node1'                       # Collect Chef Node 1 Name
 loadEnvironment 'CHEF_NODE1_IP' '10.0.1.8'                           # Collect Chef Node 1 IP address
-loadEnvironment 'CHEF_NODE2_NAME' 'chef-node1'                       # Collect Chef Node 1 Name
+loadEnvironment 'CHEF_NODE2_NAME' 'chef-node2'                       # Collect Chef Node 1 Name
 loadEnvironment 'CHEF_NODE2_IP' '10.0.1.9'                           # Collect Chef Node 1 IP address
 
 if test `hostname -s` = "$CHEF_WORKSTATION_NAME"                     # Add to parh if this is a chef workstation
