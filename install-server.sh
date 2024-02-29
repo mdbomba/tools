@@ -1,6 +1,6 @@
 version='20240227'
-. ~/.bashrc
 cd ~
+. ~/.bashrc
 #
 # This script installs chef server with automate on either Ubunto or Redhat Linux
 #
