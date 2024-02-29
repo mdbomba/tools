@@ -12,8 +12,8 @@ echo ''
 #########################################
 # CHECK IF SCRIPT WAS STARTED USING SUDO
 #########################################
-if test "x$EUID" = "x"; then
-  echo ''; echo 'Please run this script using normal user rights (not sudo)'
+if ! test "x$EUID" = "x"; then
+  echo ''; echo 'Please run this script using sudo'
   echo ''
   exit
 fi
@@ -92,7 +92,7 @@ echo ''
 echo "You ay get prompted for a sudo password to use to create the new /etc/hosts file"
 echo ''
 cat ~/.hosts_add >> ~/.hosts_new
-sudo cp -f ~/.hosts_new /etc/hosts
+cp -f ~/.hosts_new /etc/hosts
 rm ~/.hosts_new ; rm ~/.hosts_add
 
 #####################################
@@ -104,40 +104,41 @@ rm ~/.hosts_new ; rm ~/.hosts_add
 #####################################
 
 # apparmor can cause issues with Chef Server(s), so below will remove apparmor
-if [ `command -v apparmor` ]; then sudo apt remove apparmor -y; fi
+if [ `command -v apparmor` ]; then apt remove apparmor -y; fi
 
 # git is used for most chef components
-if [ ! `command -v git` ]; then sudo apt install git -y; fi
+if [ ! `command -v git` ]; then apt install git -y; fi
 git config --global user.name "$CHEF_GIT_USER"
 git config --global user.email "$CHEF_GIT_EMAIL"
 
 # curl is used across all chef components
-if [ ! `command -v curl` ]; then sudo apt install curl -y; fi
+if [ ! `command -v curl` ]; then apt install curl -y; fi
 sed '/tlsv1.2/d' ~/.curlrc > ~/.curlrc
 sed '/insecure/d' ~/.curlrc > ~/.curlrc
 echo "--tlsv1.2" >> ~/.curlrc
 echo '--insecure' >> ~/.curlrc
 
 # Install tree (pretty version of "ls -lr" command )
-if [ ! `command -v tree` ]; then sudo apt install tree -y; fi
+if [ ! `command -v tree` ]; then apt install tree -y; fi
 
 # Install gzip
-if [ ! `command -v gzip` ]; then sudo apt install gzip -y; fi
+if [ ! `command -v gzip` ]; then apt install gzip -y; fi
 
 # Ensure openssh-server is installed
-if [ ! `command -v sshd` ]; then sudo apt install openssh-server -y; fi
+if [ ! `command -v sshd` ]; then apt install openssh-server -y; fi
 
 # Install additional tools
-if [ ! `command -v wget` ]; then sudo apt install wget -y; fi
-if [ ! `command -v add-apt-repository` ]; then sudo apt install software-properties-common -y; fi
-if [ ! `command -v apt-get` ]; then sudo apt install apt-transport-https -y; fi
+if [ ! `command -v wget` ]; then apt install wget -y; fi
+if [ ! `command -v add-apt-repository` ]; then apt install software-properties-common -y; fi
+if [ ! `command -v apt-get` ]; then apt install apt-transport-https -y; fi
 
 # Install Microsoft Visual Studio code (use firefox test to ensure this is a workstation and not a server)
 if test `command -v firefox`; then
   echo ''; echo "INSTALLING or UPDATING Microsoft Vistual Studio Code";
   if ! test `command -v code`; then 
-    sudo wget -O 'code.deb' 'https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64'
-    sudo dpkg -i code.deb
+    wget -O 'code.deb' 'https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64'
+    dpkg -i code.deb
+    rm code.deb
   fi
 fi
 
@@ -150,8 +151,8 @@ fi
 #####################################
 
 if test `hostname -s` = "$CHEF_SERVER_NAME"; then
-  sudo sysctl -w vm.max_map_count=262144           | sudo tee /dev/null >> /dev/null
-  sudo sysctl -w vm.dirty_expire_centisecs=20000   | sudo tee /dev/null >> /dev/null
+  sysctl -w vm.max_map_count=262144                | sudo tee /dev/null >> /dev/null
+  sysctl -w vm.dirty_expire_centisecs=20000        | sudo tee /dev/null >> /dev/null
   grep -v 'sysctl' /etc/sysctl.conf                | sudo tee    /etc/sysctl.conf >> /dev/null
   echo 'sysctl -w vm.max_map_count=262144'         | sudo tee -a /etc/sysctl.conf >> /dev/null
   echo 'sysctl -w vm.dirty_expire_centisecs=20000' | sudo tee -a /etc/sysctl.conf >> /dev/null
