@@ -1,4 +1,4 @@
-version='20240227'
+version='20240229'
 cd ~
 . ~/.bashrc
 #
@@ -12,8 +12,8 @@ echo ''
 #########################################
 # CHECK IF SCRIPT WAS STARTED USING SUDO
 #########################################
-if test "x$EUID" = "x"; then
-  echo ''; echo 'Please run this script using normal user rights (not sudo)'
+if ! test "x$EUID" = "x"; then
+  echo ''; echo 'Please run this script using sudo'
   echo ''
   exit
 fi
@@ -36,22 +36,22 @@ git config --global user.email "$CHEF_GIT_EMAIL"
 #################################
 # UPDATE HOST
 #################################
-sudo apt update
-sudo apt upgrade -y
+apt update
+apt upgrade -y
 
 ########################################
 # DOWNLOAD AND INSTALL CHEF WORKSTATION
 ########################################
 wget -O "$PKG" "$URL"                                                        ; # Download Chef Workstation package
 if test "x$DISTRIB_ID" = "xUbuntu"
-  then sudo dpkg -i "$PKG"                                                   ; # Install Chef Workstation
-  else sudo yum localinstall "$PKG"
+  then dpkg -i "$PKG"                                                   ; # Install Chef Workstation
+  else yum localinstall "$PKG"
 fi
 
 ################################
 # INITIAL CONFIG
 ################################
-echo 'eval "$(chef shell-init bash)"'"  # CHEF PARAM" | tee -a ~/.bashrc >> /dev/null; . ~/.bashrc
+echo 'eval "$(chef shell-init bash)"'"  # CHEF PARAM" |sudo tee -a ~/.bashrc >> /dev/null; . ~/.bashrc
 chef generate repo "$CHEF_REPO" --chef-license 'accept'                                              ; # Create first chef repo 
 
 ##########################
