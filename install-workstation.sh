@@ -47,7 +47,12 @@ if test "x$DISTRIB_ID" = "xUbuntu"
   then sudo dpkg -i "$PKG"                                                   ; # Install Chef Workstation
   else sudo yum localinstall "$PKG"
 fi
-chef generate repo "$CHEF_REPO"                                               ; # Create first chef repo 
+
+################################
+# INITIAL CONFIG
+################################
+echo 'eval "$(chef shell-init bash)"'"  # CHEF PARAM" | tee -a ~/.bashrc >> /dev/null; . ~/.bashrc
+chef generate repo "$CHEF_REPO" --chef-license 'accept'                                              ; # Create first chef repo 
 
 ##########################
 # CREATE CREDENTIALS FILE
