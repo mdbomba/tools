@@ -168,13 +168,13 @@ if test `hostname -s` = "$CHEF_WORKSTATION_NAME"; then
   rm -f ~/.ssh/chef_rsa*
   ssh-keygen -b 4092 -f ~/.ssh/chef_rsa -N '' 
   cat  ~/.ssh/chef_rsa.pub >> ~/.ssh/authorized_keys
-  knife ssl fetch https://$CHEF_SERVER_NAME
-  knife ssl fetch https://$CHEF_SERVER_IP
+ # knife ssl fetch https://$CHEF_SERVER_NAME
+ # knife ssl fetch https://$CHEF_SERVER_IP
 fi
-if test `hostname -s` = "$CHEF_SERVER_NAME"; then
-  knife ssl fetch https://$CHEF_WORKSTATION_NAME
-  knife ssl fetch https://$CHEF_WORKSTATION_IP
-fi
+# if test `hostname -s` = "$CHEF_SERVER_NAME"; then
+#   knife ssl fetch https://$CHEF_WORKSTATION_NAME
+#   knife ssl fetch https://$CHEF_WORKSTATION_IP
+# fi
 #####################################
 # END UPDATE SSL CACHE
 #####################################
