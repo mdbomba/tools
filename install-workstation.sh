@@ -1,5 +1,6 @@
 version='20240227'
 cd ~
+. .bashrc
 #
 # This script installs chef workstation on either Ubunto or Redhat Linux
 #
