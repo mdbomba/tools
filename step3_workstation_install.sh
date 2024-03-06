@@ -24,7 +24,7 @@ RPM_URL='https://packages.chef.io/files/stable/chef-workstation/21.10.640/el/8/c
 
 # DETERMINE LINUX VARIENT
 if test -f /etc/lsb-release; then . /etc/lsb-release; fi
-if test "x$DISTRIB_ID" = "xUbuntu"; then URL="$DEB_URL"; else URL="$RPM_URL"; fi
+if [ "x$DISTRIB_ID" = "xUbuntu" ] || [ "x$DISTRIB_ID" = "xLinuxMint" ]; then URL="$DEB_URL"; else URL="$RPM_URL"; fi
 PKG=`echo $URL | cut -d "/" -f 10`
 
 ######################################
