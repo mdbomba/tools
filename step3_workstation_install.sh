@@ -12,8 +12,8 @@ echo ''
 #########################################
 # CHECK IF SCRIPT WAS STARTED USING SUDO
 #########################################
-if ! test "x$EUID" = "x"; then
-  echo ''; echo 'Please run this script using sudo'
+if test "x$EUID" = "x"; then
+  echo ''; echo 'Please do not run this script using sudo'
   echo ''
   exit
 fi
@@ -33,52 +33,17 @@ PKG=`echo $URL | cut -d "/" -f 10`
 git config --global user.name "$CHEF_GIT_USER"
 git config --global user.email "$CHEF_GIT_EMAIL"
 
-#################################
-# UPDATE HOST
-#################################
-apt update
-apt upgrade -y
-
 ########################################
 # DOWNLOAD AND INSTALL CHEF WORKSTATION
 ########################################
-wget -O "$PKG" "$URL"                                                        ; # Download Chef Workstation package
+wget -O "$PKG" "$URL"
 if test "x$DISTRIB_ID" = "xUbuntu"
-  then dpkg -i "$PKG"                                                   ; # Install Chef Workstation
-  else yum localinstall "$PKG"
+  then sudo dpkg -i "$PKG"
+  else sudo yum localinstall "$PKG"
 fi
 
-################################
-# INITIAL CONFIG
-################################
-echo 'eval "$(chef shell-init bash)"'"  # CHEF PARAM" |sudo tee -a ~/.bashrc >> /dev/null; . ~/.bashrc
-chef generate repo "$CHEF_REPO" --chef-license 'accept'                                              ; # Create first chef repo 
-
-##########################
-# CREATE CREDENTIALS FILE
-##########################
-if ! test -d ~/.chef; then mkdir ~/.chef; fi
-echo "[default]
-client_name     = '$CHEF_ADMIN_ID'
-client_key      = '/home/$CHEF_ADMIN_ID/.chef/$CHEF_ADMIN_ID.pem'
-chef_server_url = 'https://$CHEF_SERVER_NAME/organizations/$CHEF_ORG'
-" > ~/.chef/credentials
-
-#####################################
-# UPDATE SSL USER KEY
-#####################################
-hn=`hostname -s`
-cd ~/.ssh
-rm -f "$hn*"
-ssh-keygen -b 4092 -f $hn -N '' 
-cd ~
-
-#####################################
-# UPDATE SSL CERTIFICATE CACHE
-#####################################
-if ping -c 1 $CHEF_SERVER_IP &> /dev/null; then
-  knife ssl fetch https://$CHEF_SERVER_NAME
-  knife ssl fetch https://$CHEF_SERVER_IP
-fi
+echo "#############################################"
+echo "# Please reboot server and run step4 script #"
+echo '#############################################'
 
 

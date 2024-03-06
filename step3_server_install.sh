@@ -37,7 +37,7 @@ fi
 ###########################
 # CREATE CHEF ORGANIZATION
 ###########################
-if [ ! -f "./$CHEF_ORG-validator.pem" ]
+if [ ! -f "./$CHEF_ORG""-validator.pem" ]
   then
     sudo chef-server-ctl org-create "$CHEF_ORG" "$CHEF_ORG_LONG" --association_user "$CHEF_ADMIN_ID" --filename "$CHEF_ORG-validator.pem"
 fi
@@ -48,6 +48,6 @@ fi
 hn=`hostname -s`
 cd ~/.ssh
 rm -f "$hn*"
-ssh-keygen -b 4092 -f $hn -N '' >> /dev/null
+ssh-keygen -b 4092 -f "$hn""_rsa" -N '' >> /dev/null
 cd ~
 

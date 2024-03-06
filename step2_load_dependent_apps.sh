@@ -75,12 +75,8 @@ fi
 
 sudo  sysctl -w vm.max_map_count=262144
 sudo  sysctl -w vm.dirty_expire_centisecs=20000
-
-echo "
-sysctl -w vm.max_map_count=262144
-sysctl -w vm.dirty_expire_centisecs=20000
-" > ./sysctl.conf
-sudo  cp -f ./sysctl.conf /etc/sysctl.conf
+echo "vm.max_map_count=262144"         | sudo tee -a /etc/sysctl.conf
+echo "vm.dirty_expire_centisecs=20000" | sudo tee -a /etc/sysctl.conf
 
 #####################################
 # END UPDATE FOR CHEF SERVER ONLY
