@@ -1,9 +1,22 @@
-version='20240229'
+version='20240308'
+# This script installs chef workstation on either Ubunto or Redhat Linux
+echo 'Step2 script updates the hosts file and installs dependent applications.'
+echo "Version = $version"
+echo ''
+###################################################
+# ENSURE SCRIPT WAS STARTED NOT STARTED USING SUDO
+###################################################
+if test "x$EUID" = "x"; then
+  echo ''; echo 'This script should be started using user level (not sudo) rights. Script is terminating.'
+  echo ''
+  exit
+fi
+#
 cd ~
 . ./.bashrc
-
+#
 if [ "x$CHEF_ADMIN_ID" = "x" ]; then echo "Please run params.sh script before running this script"; exit; fi
-
+#
 #####################################
 # START UPDATE /etc/hosts SECTION
 #####################################
@@ -72,7 +85,7 @@ fi
 #####################################
 # START UPDATE FOR CHEF SERVER ONLY
 #####################################
-
+grep -i -v 'vm.' /etc/sysctl.conf > .sysctl_conf; sudo cp -f .sysctl_conf /etc/sysctl.conf; rm -f .sysctl_conf
 sudo  sysctl -w vm.max_map_count=262144
 sudo  sysctl -w vm.dirty_expire_centisecs=20000
 echo "vm.max_map_count=262144"         | sudo tee -a /etc/sysctl.conf
@@ -85,15 +98,10 @@ echo "vm.dirty_expire_centisecs=20000" | sudo tee -a /etc/sysctl.conf
 #####################################
 # START UPDATE SSL CACHE
 #####################################
-if test `hostname -s` = "$CHEF_WORKSTATION_NAME"; then
-  rm -f ~/.ssh/"$CHEF_ADMIN_ID"_rsa*
-  ssh-keygen -b 4092 -f ~/.ssh/"$CHEF_ADMIN_ID"_rsa -N '' 
-  cat  ~/.ssh/"$CHEF_ADMIN_ID"_rsa.pub >> ~/.ssh/authorized_keys
-fi
-# if test `hostname -s` = "$CHEF_WORKSTATION_NAME"; then
-#   knife ssl fetch https://$CHEF_SERVER_NAME
-#   knife ssl fetch https://$CHEF_SERVER_IP
-# fi
+rm -f ~/.ssh/"$CHEF_ADMIN_ID"_rsa*
+ssh-keygen -b 4092 -f ~/.ssh/"id_rsa"_rsa -N '' 
+cat  ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
 #####################################
 # END UPDATE SSL CACHE
 #####################################
