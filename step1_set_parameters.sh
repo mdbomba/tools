@@ -1,11 +1,26 @@
-version='20240229'
+version='20240308'
+# This script installs chef workstation on either Ubunto or Redhat Linux
+echo 'Step1 script updates the .bashrc file and installs dependent applications.'
+echo "Version = $version"
+echo ''
+###################################################
+# ENSURE SCRIPT WAS STARTED NOT STARTED USING SUDO
+###################################################
+if test "x$EUID" = "x"; then
+  echo ''; echo 'This script should be started using user level (not sudo) rights. Script is terminating.'
+  echo ''
+  exit
+fi
 #
-# This script loads environmental variables related to chef
-
+cd ~
+. ./.bashrc
+#
+grep -v -i "chef" .bashrc > bashrc; cp bashrc .bashrc
+#
 #####################################
 # START LOAD PARAMS SECTION
 #####################################
-CHEF_HOME_DIR='/home/chef'
+CHEF_LICENSE='accept'
 CHEF_GIT_USER='mdbomba'
 CHEF_GIT_USER_EMAIL='mbomba@kemptechnologies.com'
 CHEF_REPO='chef-repo'
@@ -24,7 +39,6 @@ CHEF_NODE1_NAME='node1'
 CHEF_NODE1_IP='192.168.56.6'
 CHEF_NODE2_NAME='node2'
 CHEF_NODE2_IP='192.168.56.7'
-
 #####################################
 # END LOAD PARAMS SECTION
 #####################################
@@ -32,7 +46,7 @@ CHEF_NODE2_IP='192.168.56.7'
 ################################
 # START export PARAMS
 ################################
-export CHEF_HOME_DIR
+export CHEF_LICENSE
 export CHEF_GIT_USER
 export CHEF_GIT_USER_EMAIL
 export CHEF_REPO
@@ -55,10 +69,7 @@ export CHEF_NODE2_IP
 # END export PARAMS
 ################################
 
-cd "$CHEF_HOME_DIR"
-grep -v -i "chef" .bashrc > bashrc
-cp bashrc .bashrc
-
+echo CHEF_LICENSE="'accept'" | tee -a .bashrc
 echo CHEF_HOME_DIR="'$CHEF_HOME_DIR'" | tee -a .bashrc
 echo CHEF_GIT_USER="'$CHEF_GIT_USER'" | tee -a .bashrc
 echo CHEF_GIT_USER_EMAIL="'$CHEF_GIT_USER_EMAIL'" | tee -a .bashrc
@@ -79,6 +90,7 @@ echo CHEF_NODE1_IP="'$CHEF_NODE1_IP'" | tee -a .bashrc
 echo CHEF_NODE2_NAME="'$CHEF_NODE2_NAME'" | tee -a .bashrc
 echo CHEF_NODE2_IP="'$CHEF_NODE2_IP'" | tee -a .bashrc
 
+echo 'export CHEF_LICENSE' | tee -a .bashrc
 echo 'export CHEF_HOME_DIR' | tee -a .bashrc
 echo 'export CHEF_GIT_USER' | tee -a .bashrc
 echo 'export CHEF_GIT_USER_EMAIL' | tee -a .bashrc
@@ -98,10 +110,6 @@ echo 'export CHEF_NODE1_NAME' | tee -a .bashrc
 echo 'export CHEF_NODE1_IP' | tee -a .bashrc
 echo 'export CHEF_NODE2_NAME' | tee -a .bashrc
 echo 'export CHEF_NODE2_IP' | tee -a .bashrc
-
-# BELOW SETTING TURNS SYNTAX COLOR MODE ON OR OFF FOR vi/vim
-echo 'set syntax off' | sudo tee -a /etc/vim/vimrc >>/dev/null
-
 
 echo ''
 echo '######################################################'
