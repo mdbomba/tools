@@ -42,8 +42,7 @@ fi
 ###########################
 # CREATE SSL KEY
 ###########################
-hn=`hostname -s`
-cd ~/.ssh
-rm -f "$hn*"
-ssh-keygen -b 4092 -f "$hn""_rsa" -N '' >> /dev/null
-cd ~
+rm -f ./.ssh/*
+ssh-keygen -b 4092 -f ./.ssh/id_rsa -N '' >> /dev/null
+cat ./.ssh/id_rsa.pub | tee -a ./.ssh/authorized_keys >> /dev/null
+
