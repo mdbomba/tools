@@ -1,4 +1,4 @@
-version='20240229'
+version='20240308'
 # This script performs post installation configuration on chef worksatation or chef server
 echo 'Step4 script performs post installation configuration on chef worksatation or chef server.'
 echo "Version = $version"
