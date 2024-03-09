@@ -1,27 +1,24 @@
-version='20240229'
-cd ~
-. ~/.bashrc
-#
+version='20240308'
 # This script installs chef workstation on either Ubunto or Redhat Linux
-#
-echo 'This script installs chef workstation'
-echo 'This script should be started using user level (not sudo) rights.'
+echo 'Step3 script installs chef workstation.'
 echo "Version = $version"
 echo ''
-
-#########################################
-# CHECK IF SCRIPT WAS STARTED USING SUDO
-#########################################
+###################################################
+# ENSURE SCRIPT WAS STARTED NOT STARTED USING SUDO
+###################################################
 if test "x$EUID" = "x"; then
-  echo ''; echo 'Please do not run this script using sudo'
+  echo ''; echo 'This script should be started using user level (not sudo) rights. Script is terminating.'
   echo ''
   exit
 fi
-
+#
+cd ~
+. ./.bashrc
+#
 # SOURCES FOR rpm and deb PACKAGES FOR CHEF WORKSTATION
-DEB_URL='https://packages.chef.io/files/stable/chef-workstation/23.12.1055/ubuntu/22.04/chef-workstation_23.12.1055-1_amd64.deb'
+DEB_URL='https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb'
 RPM_URL='https://packages.chef.io/files/stable/chef-workstation/21.10.640/el/8/chef-workstation-21.10.640-1.el8.x86_64.rpm'
-
+#
 # DETERMINE LINUX VARIENT
 if test -f /etc/lsb-release; then . /etc/lsb-release; fi
 if [ "x$DISTRIB_ID" = "xUbuntu" ] || [ "x$DISTRIB_ID" = "xLinuxMint" ]; then URL="$DEB_URL"; else URL="$RPM_URL"; fi
@@ -45,5 +42,4 @@ fi
 echo "#############################################"
 echo "# Please reboot server and run step4 script #"
 echo '#############################################'
-
 
