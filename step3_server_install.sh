@@ -38,11 +38,4 @@ if [ ! -f "./$CHEF_ORG""-validator.pem" ]
   then
     sudo chef-server-ctl org-create "$CHEF_ORG" "$CHEF_ORG_LONG" --association_user "$CHEF_ADMIN_ID" --filename "$CHEF_ORG-validator.pem"
 fi
-#
-###########################
-# CREATE SSL KEY
-###########################
-rm -f ./.ssh/*
-ssh-keygen -b 4092 -f ./.ssh/id_rsa -N '' >> /dev/null
-cat ./.ssh/id_rsa.pub | tee -a ./.ssh/authorized_keys >> /dev/null
 
