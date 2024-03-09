@@ -31,7 +31,7 @@ $CHEF_NODE1_IP  $CHEF_NODE1_NAME  $CHEF_NODE1_NAME.$CHEF_DOMAINNAME  # CHEF Node
 $CHEF_NODE2_IP  $CHEF_NODE2_NAME  $CHEF_NODE2_NAME.$CHEF_DOMAINNAME  # CHEF Node 2
 " >> ~/.hosts
 
-sudo cp -f ~/.hosts /etc/hosts; rm ~/.hosts
+sudo cp -f ./.hosts /etc/hosts; rm ./.hosts
 
 #####################################
 # END UPDATE /etc/hosts SECTION
@@ -85,6 +85,7 @@ fi
 #####################################
 # START UPDATE FOR CHEF SERVER ONLY
 #####################################
+
 grep -i -v 'vm.' /etc/sysctl.conf > .sysctl_conf; sudo cp -f .sysctl_conf /etc/sysctl.conf; rm -f .sysctl_conf
 sudo  sysctl -w vm.max_map_count=262144
 sudo  sysctl -w vm.dirty_expire_centisecs=20000
