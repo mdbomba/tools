@@ -1,4 +1,4 @@
-version='20240308'
+version='20240229'
 # This script installs chef workstation on either Ubunto or Redhat Linux
 echo 'Step2 script updates the hosts file and installs dependent applications.'
 echo "Version = $version"
@@ -31,7 +31,7 @@ $CHEF_NODE1_IP  $CHEF_NODE1_NAME  $CHEF_NODE1_NAME.$CHEF_DOMAINNAME  # CHEF Node
 $CHEF_NODE2_IP  $CHEF_NODE2_NAME  $CHEF_NODE2_NAME.$CHEF_DOMAINNAME  # CHEF Node 2
 " >> ~/.hosts
 
-sudo cp -f ./.hosts /etc/hosts; rm ./.hosts
+sudo cp -f ~/.hosts /etc/hosts; rm ~/.hosts
 
 #####################################
 # END UPDATE /etc/hosts SECTION
@@ -47,13 +47,13 @@ if [ -f ./.curlrc ]; then grep -v -i 'tls' ./.curlrc | grep -v -i 'insecure' > .
 echo "--tlsv1.2" >> ./.curlrc_new; echo '--insecure' >> ./.curlrc_new; cp -f ./.curlrc_new ./.curlrc; rm ./.curlrc_new
 
 # apparmor can cause issues with Chef Server(s), so below will remove apparmor
-sudo apt remove apparmor -y; fi
+sudo apt remove apparmor -y
 
 # git is used for most chef components
 if [ ! `command -v git` ]; then sudo apt install git -y; fi
 git config --global user.name "$CHEF_GIT_USER"
 git config --global user.email "$CHEF_GIT_EMAIL"
-
+y
 # Install tree (pretty version of "ls -lr" command )
 if [ ! `command -v tree` ]; then sudo apt install tree -y; fi
 
@@ -85,7 +85,6 @@ fi
 #####################################
 # START UPDATE FOR CHEF SERVER ONLY
 #####################################
-
 grep -i -v 'vm.' /etc/sysctl.conf > .sysctl_conf; sudo cp -f .sysctl_conf /etc/sysctl.conf; rm -f .sysctl_conf
 sudo  sysctl -w vm.max_map_count=262144
 sudo  sysctl -w vm.dirty_expire_centisecs=20000
