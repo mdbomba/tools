@@ -47,7 +47,7 @@ if [ -f ./.curlrc ]; then grep -v -i 'tls' ./.curlrc | grep -v -i 'insecure' > .
 echo "--tlsv1.2" >> ./.curlrc_new; echo '--insecure' >> ./.curlrc_new; cp -f ./.curlrc_new ./.curlrc; rm ./.curlrc_new
 
 # apparmor can cause issues with Chef Server(s), so below will remove apparmor
-if [ `command -v apparmor` ]; then sudo apt remove apparmor -y; fi
+sudo apt remove apparmor -y; fi
 
 # git is used for most chef components
 if [ ! `command -v git` ]; then sudo apt install git -y; fi
