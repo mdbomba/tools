@@ -1,5 +1,5 @@
-git config --global user.name "mdbomba"
-git config --global user.email "mike.bomba.az@gmail.com"
+git config --global user.name {}
+git config --global user.email {}
 
 git config --global credential.helper manager-core
 
@@ -8,14 +8,14 @@ get credential approve
 
 #    protocol=https
 #    host=github.com
-#    username=mdbomba
+#    username={}
 #    password={}
 
-git config --local user.name "mdbomba"
-git config --local user.email "mike.bomba.az@gmail.com"
+git config --local user.name {}
+git config --local user.email {}
 
-git config --local user.name "Michael Bomba"
-git config --local user.email "michael.bomba@progressfederal.com"
+git config --local user.name {}
+git config --local user.email {}
 
 git config --global core.editor "code --wait" # VS Code
 git config --global core.editor nano # Nano
@@ -28,10 +28,8 @@ git config --list
 git config --list --show-origin
 
 cd \Users\chef\get-repo
+git init
 mkdir mdbomba
-cd mdbomba
-mkdir tools
-cd tools
 git clone https://github.com/mdbomba/tools
 git remote
 
