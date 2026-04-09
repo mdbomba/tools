@@ -1,0 +1,49 @@
+git config --global user.name "mdbomba"
+git config --global user.email "mike.bomba.az@gmail.com"
+
+git config --global credential.helper manager-core
+
+git config --global credential.helper store
+get credential approve
+
+#    protocol=https
+#    host=github.com
+#    username=mdbomba
+#    password=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
+
+git config --local user.name "mdbomba"
+git config --local user.email "mike.bomba.az@gmail.com"
+
+git config --local user.name "Michael Bomba"
+git config --local user.email "michael.bomba@progressfederal.com"
+
+git config --global core.editor "code --wait" # VS Code
+git config --global core.editor nano # Nano
+git config --global core.editor "'C:\Program Files\Notepad++/notepad++.exe' -multiInst -notabbar -nosession -noPlugin" # Notepad++
+
+git config --global color.ui auto
+
+git config --list
+
+git config --list --show-origin
+
+cd \Users\chef\get-repo
+mkdir mdbomba
+cd mdbomba
+mkdir tools
+cd tools
+git clone https://github.com/mdbomba/tools
+git remote
+
+# make changes to local files
+git status
+
+git add {filename}
+
+git commit -m "Enter comments about change here"
+
+git push
+
+
+
+
