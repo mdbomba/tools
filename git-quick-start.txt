@@ -9,7 +9,7 @@ get credential approve
 #    protocol=https
 #    host=github.com
 #    username=mdbomba
-#    password=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
+#    password={}
 
 git config --local user.name "mdbomba"
 git config --local user.email "mike.bomba.az@gmail.com"
