@@ -3,7 +3,7 @@ $ChefAdminUser='chef'
 $ChefAdminFirstName='Master'
 $ChefAdminLastName='Chef'
 $ChefAdminEmail='chef@kemptech.biz'
-$ChefAdminUserPassword='devsecops'
+$ChefAdminUserPassword=''               # add password to create new user account
 $ChefAdminPEM="${ChefHome}\chef.pem'
 
 $ChefOrgName='devops'
